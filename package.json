@@ -8,8 +8,12 @@
     "example": "node ./example/example.js"
   },
   "author": "Sigve Kvalsvik",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "ws": "^1.1.0"
+  },
+  "repository" : {
+  	"type" : "git",
+    "url" : "https://github.com/svk31/steem-rpc.git"
   }
 }
