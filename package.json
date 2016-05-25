@@ -1,0 +1,15 @@
+{
+  "name": "steem-rpc",
+  "version": "0.1.0",
+  "description": "Websocket RPC library for the Steem blockchain",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "example": "node ./example/example.js"
+  },
+  "author": "Sigve Kvalsvik",
+  "license": "ISC",
+  "dependencies": {
+    "ws": "^1.1.0"
+  }
+}
