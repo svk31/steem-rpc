@@ -46,7 +46,7 @@ class Api {
 		let request = {
             method: "call",
             params: params,
-            id: this.currentCallbackId
+            id: this.currentCallbackId++
         };       
 
 		return new Promise((resolve, reject) => {
