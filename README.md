@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/steem-rpc.svg)](https://badge.fury.io/js/steem-rpc)
+
 ## steem-rpc
 
 A simple websocket wrapper enabling RPC communication with the steem client `steemd` for node.js and browsers.
