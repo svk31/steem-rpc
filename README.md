@@ -50,9 +50,24 @@ This library borrows heavily from [James Calfee](https://github.com/jcalfee)'s w
 
 ### Available api commands
 
+There's a handy "shortcut" api call that will get you a global state object:
+
+```
+get_state(string route)
+```
+
+You can call this with an empty string, or with a category like `trending`.
+
+```
+Api.get().dbApi().exec("get_state", ["trending"]).then(response => {
+	console.log("get_state", response);
+})
+```
+
 The following api calls are currently available from the steemd database api:
 
 ```
+      // State
       // Blocks and transactions
       get_block_header(uint32_t block_num);
       get_block(uint32_t block_num);
