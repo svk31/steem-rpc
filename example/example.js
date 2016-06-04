@@ -1,4 +1,4 @@
-const client = require("../index");
+const client = require("../src/index");
 
 const options = {
 	// user: "username",
