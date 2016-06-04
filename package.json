@@ -4,13 +4,22 @@
   "description": "Websocket RPC library for the Steem blockchain",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "example": "node ./example/example.js"
+    "test": "mocha --recursive",
+    "example": "node ./example/example.js",
+    "build": "babel src --presets babel-preset-es2015 --out-dir lib",
+    "prepublish": "npm run build"
   },
-  "author": "Sigve Kvalsvik",
+  "author": "Sigve Kvalsvik <bitsharesblocks@gmail.com> (https://github.com/svk31)",
   "license": "MIT",
   "dependencies": {
     "ws": "^1.1.0"
+  },
+  "devDependencies": {
+    "assert": "^1.3.0",
+    "babel-cli": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "esdoc": "^0.4.3",
+    "mocha": "^2.3.4"
   },
   "repository" : {
   	"type" : "git",

@@ -1,4 +1,4 @@
-const Client = require("./src/ApiInstance");
+const Client = require("./ApiInstance");
 
 module.exports = function(options) {
 	return new Client(options || {});
