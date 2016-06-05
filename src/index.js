@@ -1,5 +1,7 @@
 const Client = require("./ApiInstance");
 
-module.exports = function(options) {
+function client(options) {
 	return new Client(options || {});
 };
+
+module.exports = exports = client;

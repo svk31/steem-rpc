@@ -1,14 +1,16 @@
-const WebSocket = require('ws');
-
 class Api {
 
 	constructor(wsUrl) {
 
+        var WebSocketClient = typeof(WebSocket) !== "undefined" ? require("ReconnectingWebSocket") : require("websocket").w3cwebsocket;
+
 		try {
-			this.ws = new WebSocket(wsUrl);
+			this.ws = new WebSocketClient(wsUrl);
 		} catch(err) {
 			console.error("ws error:", err);
 		}
+
+        this.ws.timeoutInterval = 15000;
 
 		this.connectPromise = new Promise((resolve, reject) => {
 
