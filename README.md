@@ -64,3 +64,65 @@ Api.get().dbApi().exec("get_state", ["trending"]).then(response => {
 	console.log("get_state", response);
 })
 ```
+
+The full list of api calls is this:
+
+```
+	cancel_all_subscriptions
+	get_account_count
+	get_account_history
+	get_account_references
+	get_account_votes
+	get_accounts
+	get_active_categories
+	get_active_votes
+	get_active_witnesses
+	get_best_categories
+	get_block
+	get_block_header
+	get_chain_properties
+	get_config
+	get_content
+	get_content_replies
+	get_conversion_requests
+	get_current_median_history_price
+	get_discussions_by_active
+	get_discussions_by_author_before_date
+	get_discussions_by_cashout
+	get_discussions_by_children
+	get_discussions_by_created
+	get_discussions_by_hot
+	get_discussions_by_payout
+	get_discussions_by_trending
+	get_discussions_by_votes
+	get_dynamic_global_properties
+	get_feed_history
+	get_hardfork_version
+	get_key_references
+	get_miner_queue
+	get_next_scheduled_hardfork
+	get_order_book
+	get_potential_signatures
+	get_recent_categories
+	get_recommended_for
+	get_replies_by_last_update
+	get_required_signatures
+	get_state
+	get_transaction
+	get_transaction_hex
+	get_trending_categories
+	get_trending_tags
+	get_witness_by_account
+	get_witness_count
+	get_witness_schedule
+	get_witnesses
+	get_witnesses_by_vote
+	lookup_account_names
+	lookup_accounts
+	lookup_witness_accounts
+	set_block_applied_callback
+	set_pending_transaction_callback
+	set_subscribe_callback
+	verify_account_authority
+	verify_authority
+```
