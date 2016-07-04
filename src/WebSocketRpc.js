@@ -27,12 +27,12 @@ class Api {
 			}
 		});
 
-		this.currentCallbackId = 0;
-		this.callbacks = new Map();
+		this.cbId = 0;
+		this.cbs = new Map();
 	}
 
 	listener(message) {
-		let callback = this.callbacks.get(message.id);
+		let callback = this.cbs.get(message.id);
 		if (callback) {
 			if ("error" in message) {
 				callback.reject(message.error);
@@ -48,12 +48,12 @@ class Api {
 		let request = {
             method: "call",
             params: params,
-            id: this.currentCallbackId++
-        };       
+            id: this.cbId++
+        };
 
 		return new Promise((resolve, reject) => {
 
-            this.callbacks.set(request.id, {
+            this.cbs.set(request.id, {
                 time: new Date(),
                 resolve: resolve,
                 reject: reject

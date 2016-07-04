@@ -16,12 +16,12 @@
 
     <script src="../build/steem-rpc.min.js"></script>
     <script type="text/javascript">
-        var Api = new window.steemRPC();
+        var Api = new window.steemWS();
         Api.get().initPromise.then(response => {
             console.log("Api ready:", response);
             var sucessDiv = document.getElementById("success");
             sucessDiv.innerText = "Successfully connected to the Steemit API, now fetching the global properties:"
-            
+
             Api.get().dbApi().exec("get_dynamic_global_properties", []).then(response => {
                 console.log("get_dynamic_global_properties", response);
                 var globalTable = document.getElementById("dynamic_global");

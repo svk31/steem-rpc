@@ -3,13 +3,16 @@
   "version": "0.2.0",
   "description": "Websocket RPC library for the Steem blockchain",
   "main": "lib/index.js",
+  "browser": {
+    "websocket": false
+  },
   "scripts": {
     "test": "mocha --recursive",
     "example": "node ./example/example.js",
     "build": "babel src --presets babel-preset-es2015 --out-dir lib",
-    "minify": "uglifyjs --compress --mangle --output build/steem-rpc.min.js -- build/steem-rpc.js",
-    "browserify": "browserify lib/index.js --standalone steemRPC -o build/steem-rpc.js -d",
-    "bundle": "npm run browserify && npm run minify",
+    "prebrowserify": "npm run build",
+    "postbrowserify": "uglifyjs --compress --mangle --sequences --drop_console --output build/steem-rpc.min.js -- build/steem-rpc.js",
+    "browserify": "browserify lib/index.js --standalone steemWS -o build/steem-rpc.js -d",
     "prepublish": "npm run build"
   },
   "author": "Sigve Kvalsvik <bitsharesblocks@gmail.com> (https://github.com/svk31)",
