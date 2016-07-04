@@ -8,7 +8,7 @@ const options = {
 
 var Api = require("../src/index")(options);
 
-describe("API", function ()  {
+describe("Db API", function ()  {
     this.timeout(10000);
     // Connect once for all tests // ws://localhost:8090
     before(function() {
@@ -16,7 +16,7 @@ describe("API", function ()  {
     });
 
     it("Get dynamic global object", function(done) {
-        return Api.get().dbApi().exec("get_dynamic_global_properties", [])
+        return Api.get().database_api().exec("get_dynamic_global_properties", [])
             .then(function(response) {
                 expect(response.id).to.equal("2.0.0");
                 done();
@@ -24,14 +24,14 @@ describe("API", function ()  {
     });
 
     it("Get trending state", function(done) {
-        return Api.get().dbApi().exec("get_state", ["trending"])
+        return Api.get().database_api().exec("get_state", ["trending"])
             .then(function(response) {
                 done();
             }).catch(done);
     })
 
     it("Get block", function(done) {
-        return Api.get().dbApi().exec("get_block", [1])
+        return Api.get().database_api().exec("get_block", [1])
             .then(function(response) {
                 expect(response.previous).to.equal("0000000000000000000000000000000000000000");
                 done();
@@ -39,7 +39,7 @@ describe("API", function ()  {
     })
 
     it("Get witness count", function(done) {
-        return Api.get().dbApi().exec("get_witness_count", [])
+        return Api.get().database_api().exec("get_witness_count", [])
             .then(function(response) {
                 expect(response).to.be.a('number');
                 expect(response).to.be.above(0);
@@ -48,11 +48,15 @@ describe("API", function ()  {
     })
 
     it("Get order book", function(done) {
-        return Api.get().dbApi().exec("get_order_book", [10])
+        return Api.get().database_api().exec("get_order_book", [10])
             .then(function(response) {
                 expect(response.asks).to.be.an('array');
                 expect(response.bids).to.be.an('array');
                 done();
             }).catch(done);
+    })
+
+    after(function() {
+        Api.close();
     })
 });
