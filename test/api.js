@@ -3,7 +3,7 @@ var expect = require("expect.js");
 const options = {
     // user: "username",
     // pass: "password",
-    // url: "wss://steemit.com/ws"
+    url: "ws://127.0.0.1:8090"
 };
 
 var Api = require("../src/index")(options);
@@ -47,7 +47,7 @@ describe("API", function ()  {
             }).catch(done);
     })
 
-        it("Get order book", function(done) {
+    it("Get order book", function(done) {
         return Api.get().dbApi().exec("get_order_book", [10])
             .then(function(response) {
                 expect(response.asks).to.be.an('array');

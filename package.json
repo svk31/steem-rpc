@@ -1,6 +1,6 @@
 {
   "name": "steem-rpc",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Websocket RPC library for the Steem blockchain",
   "main": "lib/index.js",
   "browser": {
@@ -28,6 +28,7 @@
     "browserify": "^13.0.1",
     "esdoc": "^0.4.3",
     "expect": "^1.20.1",
+    "expect.js": "^0.3.1",
     "mocha": "^2.3.4",
     "uglify-js": "^2.6.2"
   },
