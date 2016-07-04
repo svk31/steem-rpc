@@ -5,7 +5,8 @@ const defaultOptions = {
     url: "wss://steemit.com/ws",
     user: "",
     pass: "",
-    debug: false
+    debug: false,
+    apis: ["database_api"]
 };
 
 var apiInstance;
@@ -13,7 +14,7 @@ var apiInstance;
 class ApiInstance {
 
 	constructor(options) {
-        this.options = Object.assign({}, defaultOptions, options); 
+        this.options = Object.assign({}, defaultOptions, options);
 	}
 
 	connect() {
@@ -24,25 +25,27 @@ class ApiInstance {
         if (this.options.debug) {
             console.log("connect options:", this.options);
         }
-		
+
         this.wsRpc = new WsRpc(this.options.url);
         this.initPromise = this.wsRpc.login(this.options.user, this.options.pass).then(() => {
-            this._db_api = new SteemApi(this.wsRpc, "database_api");
-            
-            var db_promise = this._db_api.init().then( ()=> {
-                return "connected to db_api";
-            });
+            // this._db_api = new SteemApi(this.wsRpc, "database_api");
 
-            return Promise.all([
-            	db_promise
-            ]);
+            var apiPromises = [];
+            // apiPromises.push(this._db_api.init().then( ()=> {
+            //     return "connected to db_api";
+            // }));
+
+            this.options.apis.forEach(api => {
+                this["_" + api] = new SteemApi(this.wsRpc, api);
+                this[api] = function() {return this["_" + api];}
+                apiPromises.push(this["_" + api].init().then( ()=> {
+                    return "connected to " + api;
+                }));
+            })
+
+            return Promise.all(apiPromises);
         });
 	}
-
-	dbApi () {
-        return this._db_api;
-    }
-
 }
 
 class Instance {
@@ -50,7 +53,7 @@ class Instance {
     constructor(options) {
         this.options = options;
     }
-	
+
 	get() {
 		if (!apiInstance) {
 			apiInstance = new ApiInstance(this.options);
@@ -59,6 +62,13 @@ class Instance {
 
 		return apiInstance;
 	}
+
+    close() {
+        if (apiInstance) {
+            apiInstance.wsRpc.close();
+            apiInstance = null;
+        }
+    }
 }
 
 module.exports = Instance;
