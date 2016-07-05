@@ -7,7 +7,7 @@
     "websocket": false
   },
   "scripts": {
-    "test": "mocha --recursive",
+    "test": "mocha --recursive --watch",
     "example": "node ./example/example.js",
     "build": "babel src --presets babel-preset-es2015 --out-dir lib",
     "prebrowserify": "npm run build",

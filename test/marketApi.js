@@ -45,6 +45,29 @@ describe("Market API", function ()  {
             }).catch(done);
     });
 
+    it("get_volume", function(done) {
+        return Api.get().market_history_api().exec("get_volume", [
+        ])
+        .then(function(response) {
+            expect("steem_volume" in response).to.equal(true);
+            expect("sbd_volume" in response).to.equal(true);
+            done();
+        }).catch(done);
+    });
+
+    it("get_ticker", function(done) {
+        return Api.get().market_history_api().exec("get_ticker", [
+        ])
+        .then(function(response) {
+            expect("latest" in response).to.equal(true);
+            expect("lowest_ask" in response).to.equal(true);
+            expect("highest_bid" in response).to.equal(true);
+            expect("percent_change" in response).to.equal(true);
+            expect("steem_volume" in response).to.equal(true);
+            expect("sbd_volume" in response).to.equal(true);
+            done();
+        }).catch(done);
+    });
 
     it("get_market_history_buckets", function(done) {
         return Api.get().market_history_api().exec("get_market_history_buckets", [
