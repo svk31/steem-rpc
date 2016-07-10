@@ -1,6 +1,6 @@
 {
   "name": "steem-rpc",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Websocket RPC library for the Steem blockchain",
   "main": "lib/index.js",
   "browser": {
@@ -10,6 +10,7 @@
     "test": "mocha --recursive --watch",
     "example": "node ./example/example.js",
     "build": "babel src --presets babel-preset-es2015 --out-dir lib",
+    "build:watch": "babel --watch src --presets babel-preset-es2015 --out-dir lib",
     "prebrowserify": "npm run build",
     "postbrowserify": "uglifyjs --compress --mangle --sequences --drop_console --output build/steem-rpc.min.js -- build/steem-rpc.js",
     "browserify": "browserify lib/index.js --standalone steemWS -o build/steem-rpc.js -d",

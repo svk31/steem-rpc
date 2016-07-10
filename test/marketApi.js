@@ -4,23 +4,27 @@ const options = {
     // user: "username",
     // pass: "password",
     url: "ws://127.0.0.1:8090",
-    apis: ["market_history_api"]
+    apis: ["database_api", "market_history_api"],
+    debug: true
 };
 
-var Api = require("../src/index")(options);
+var {Client} = require("../src/index");
+// Client.close();
+var Api = Client.get(options);
 
 describe("Market API", function ()  {
     this.timeout(10000);
     // Connect once for all tests // ws://localhost:8090
     it("Get market_history_api", function(done) {
-        Api.get().initPromise.then(function(res) {
-            expect(res[0]).to.equal("connected to market_history_api");
+        Api.initPromise.then(function(res) {
+            console.log("res", res);
+            expect(res[1]).to.equal("connected to market_history_api");
             done();
         }).catch(done)
     });
 
     it("get_order_book", function(done) {
-        return Api.get().market_history_api().exec("get_order_book", [5])
+        return Api.market_history_api().exec("get_order_book", [5])
             .then(function(response) {
                 expect(response.bids.length).to.be.greaterThan(0);
                 expect(response.asks.length).to.be.greaterThan(0);
@@ -34,7 +38,7 @@ describe("Market API", function ()  {
         endDate.setDate(endDate.getDate() + 1);
         startDateShort = new Date(startDateShort.getTime() - 3600 * 50 * 1000);
 
-        return Api.get().market_history_api().exec("get_trade_history", [
+        return Api.market_history_api().exec("get_trade_history", [
             startDateShort.toISOString().slice(0, -5),
             endDate.toISOString().slice(0, -5),
             5
@@ -46,7 +50,7 @@ describe("Market API", function ()  {
     });
 
     it("get_volume", function(done) {
-        return Api.get().market_history_api().exec("get_volume", [
+        return Api.market_history_api().exec("get_volume", [
         ])
         .then(function(response) {
             expect("steem_volume" in response).to.equal(true);
@@ -56,7 +60,7 @@ describe("Market API", function ()  {
     });
 
     it("get_ticker", function(done) {
-        return Api.get().market_history_api().exec("get_ticker", [
+        return Api.market_history_api().exec("get_ticker", [
         ])
         .then(function(response) {
             expect("latest" in response).to.equal(true);
@@ -70,7 +74,7 @@ describe("Market API", function ()  {
     });
 
     it("get_market_history_buckets", function(done) {
-        return Api.get().market_history_api().exec("get_market_history_buckets", [
+        return Api.market_history_api().exec("get_market_history_buckets", [
         ])
         .then(function(response) {
             expect(response.length).to.be.greaterThan(0);
@@ -84,7 +88,7 @@ describe("Market API", function ()  {
         endDate.setDate(endDate.getDate() + 1);
         startDateShort = new Date(startDateShort.getTime() - 3600 * 50 * 1000);
 
-        return Api.get().market_history_api().exec("get_market_history", [
+        return Api.market_history_api().exec("get_market_history", [
             300,
             startDateShort.toISOString().slice(0, -5),
             endDate.toISOString().slice(0, -5)

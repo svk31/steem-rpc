@@ -11,20 +11,51 @@ const defaultOptions = {
 
 var apiInstance;
 
+module.exports = {
+
+    setRpcConnectionStatusCallback: function(callback) {
+        this.statusCb = callback;
+        if(apiInstance) apiInstance.setRpcConnectionStatusCallback(callback);
+    },
+
+    reset: function ( options ) {
+        if ( apiInstance ) {
+            apiInstance.close();
+        }
+        apiInstance =new ApiInstance(options);
+        apiInstance.connect();
+
+        return apiInstance;
+    },
+
+	get(options) {
+
+		if (!apiInstance) {
+			apiInstance = new ApiInstance(options);
+			apiInstance.connect();
+		}
+
+		return apiInstance;
+	},
+
+    close: () => {apiInstance.close(); apiInstance = null;}
+}
+
 class ApiInstance {
 
 	constructor(options) {
         this.options = Object.assign({}, defaultOptions, options);
+        if (this.options.apis.indexOf("database_api") === -1) {
+            this.options.apis.unshift("database_api");
+        }
+
+        console.log("instance options:", this.options);
 	}
 
 	connect() {
 		if (this.wsRpc) {
 			return;
 		}
-
-        if (this.options.debug) {
-            console.log("connect options:", this.options);
-        }
 
         this.wsRpc = new WsRpc(this.options.url);
         this.initPromise = this.wsRpc.login(this.options.user, this.options.pass).then(() => {
@@ -39,36 +70,24 @@ class ApiInstance {
                 this["_" + api] = new SteemApi(this.wsRpc, api);
                 this[api] = function() {return this["_" + api];}
                 apiPromises.push(this["_" + api].init().then( ()=> {
-                    return "connected to " + api;
+                    if (api === "database_api") {
+                        return this[api]().exec("get_config", []).then((res) => {
+                            this.chainId = res.STEEMIT_CHAIN_ID;
+                            return "connected to " + api;
+                        })
+                    } else {
+                        return "connected to " + api;
+                    }
                 }));
             })
 
             return Promise.all(apiPromises);
         });
 	}
-}
-
-class Instance {
-
-    constructor(options) {
-        this.options = options;
-    }
-
-	get() {
-		if (!apiInstance) {
-			apiInstance = new ApiInstance(this.options);
-			apiInstance.connect();
-		}
-
-		return apiInstance;
-	}
 
     close() {
-        if (apiInstance) {
-            apiInstance.wsRpc.close();
-            apiInstance = null;
-        }
+        this.wsRpc.close();
+        this.wsRpc = null
+        this.options = null;
     }
 }
-
-module.exports = Instance;
