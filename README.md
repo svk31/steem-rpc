@@ -18,20 +18,19 @@ If you would like to use it in a browser, browser builds are available in /build
 The library needs to initialize a connection and retrieve some api references before it is ready to be used. A simple init and use case can be seen in example/example.js and can be launched with `npm run example`
 
 ```
-const client = require("steem-rpc")
 const options = {
 	// user: "username",
 	// pass: "password",
 	// url: "ws://localhost:9090",
 	// debug: false
 };
+const {Client} = require("steem-rpc");
+var Api = Client(options);
 
-var Api = new client(options);
-
-Api.get().initPromise.then(response => {
+Api.initPromise.then(response => {
 	console.log("Api ready:", response);
 
-	Api.get().dbApi().exec("get_dynamic_global_properties", []).then(response => {
+	Api.database_api().exec("get_dynamic_global_properties", []).then(response => {
 		console.log("get_dynamic_global_properties", response);
 	})
 });
@@ -60,7 +59,7 @@ get_state(string route)
 You can call this with an empty string, or with a category like `trending`.
 
 ```
-Api.get().dbApi().exec("get_state", ["trending"]).then(response => {
+Api.database_api().exec("get_state", ["trending"]).then(response => {
 	console.log("get_state", response);
 })
 ```
