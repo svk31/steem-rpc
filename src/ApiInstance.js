@@ -2,7 +2,7 @@ const WsRpc = require("./WebSocketRpc");
 const SteemApi = require("./SteemApi");
 
 const defaultOptions = {
-    url: "wss://steemit.com/ws",
+    url: "wss://this.piston.rocks",
     user: "",
     pass: "",
     debug: false,
