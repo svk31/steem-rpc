@@ -10,14 +10,14 @@ const options = {
 
 var {Client} = require("../src/index");
 // Client.close();
-var Api = Client.get(options);
+var Api = Client.get(options, true);
 
 describe("Market API", function ()  {
     this.timeout(10000);
     // Connect once for all tests // ws://localhost:8090
     it("Get market_history_api", function(done) {
         Api.initPromise.then(function(res) {
-            console.log("res", res);
+            // console.log("res", res);
             expect(res[1]).to.equal("connected to market_history_api");
             done();
         }).catch(done)

@@ -9,7 +9,7 @@ const options = {
 };
 
 var {Client} = require("../src/index");
-var Api = Client.get(options);
+var Api = Client.get(options, true);
 
 describe("Db API", function ()  {
     this.timeout(10000);
