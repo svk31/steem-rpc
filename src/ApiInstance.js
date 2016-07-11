@@ -6,7 +6,7 @@ const defaultOptions = {
     user: "",
     pass: "",
     debug: false,
-    apis: ["database_api"]
+    apis: ["database_api", "network_broadcast_api"]
 };
 
 var apiInstance;
@@ -20,20 +20,24 @@ module.exports = {
 
     reset: function ( options ) {
         if ( apiInstance ) {
-            apiInstance.close();
+            this.close();
         }
-        apiInstance =new ApiInstance(options);
+        apiInstance = new ApiInstance(options);
         apiInstance.connect();
 
         return apiInstance;
     },
 
-	get(options) {
+	get(options, connect) {
 
 		if (!apiInstance) {
 			apiInstance = new ApiInstance(options);
-			apiInstance.connect();
 		}
+
+        if (connect) {
+            apiInstance.setOptions(options);
+            apiInstance.connect();
+        }
 
 		return apiInstance;
 	},
@@ -44,27 +48,31 @@ module.exports = {
 class ApiInstance {
 
 	constructor(options) {
+        this.setOptions(options);
+	}
+
+    setOptions(options) {
         this.options = Object.assign({}, defaultOptions, options);
         if (this.options.apis.indexOf("database_api") === -1) {
             this.options.apis.unshift("database_api");
         }
-
         console.log("instance options:", this.options);
-	}
+    }
 
 	connect() {
 		if (this.wsRpc) {
 			return;
 		}
 
-        this.wsRpc = new WsRpc(this.options.url);
-        this.initPromise = this.wsRpc.login(this.options.user, this.options.pass).then(() => {
-            // this._db_api = new SteemApi(this.wsRpc, "database_api");
+        try {
+            this.wsRpc = new WsRpc(this.options.url);
+        } catch(err) {
+            console.err("wsRpc open error:", err);
+        }
 
+        this.initPromise = this.wsRpc.login(this.options.user, this.options.pass)
+        .then(() => {
             var apiPromises = [];
-            // apiPromises.push(this._db_api.init().then( ()=> {
-            //     return "connected to db_api";
-            // }));
 
             this.options.apis.forEach(api => {
                 this["_" + api] = new SteemApi(this.wsRpc, api);
@@ -80,14 +88,18 @@ class ApiInstance {
                     }
                 }));
             })
-
             return Promise.all(apiPromises);
+        }).catch(err => {
+            // console.error("Unable to connect to", this.options.url);
+            throw new Error("Unable to connect to " + this.options.url);
         });
 	}
 
     close() {
-        this.wsRpc.close();
-        this.wsRpc = null
+        if (this.wsRpc) {
+            this.wsRpc.close();
+            this.wsRpc = null
+        }
         this.options = null;
     }
 }

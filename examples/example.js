@@ -5,7 +5,7 @@ const options = {
 };
 
 const {Client} = require("../src/index");
-var Api = Client(options);
+var Api = Client(options, true);
 Api.initPromise.then(response => {
 	console.log("Api ready:", response);
 

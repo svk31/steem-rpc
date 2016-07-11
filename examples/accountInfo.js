@@ -7,7 +7,7 @@ const options = {
     url: "ws://localhost:8090"
 };
 const {Client} = require("../src/index");
-var Api = Client(options);
+var Api = Client(options, true);
 
 Api.initPromise.then(response => {
     console.log("response:", response);

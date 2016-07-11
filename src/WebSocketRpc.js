@@ -60,7 +60,6 @@ class Api {
             });
 
             this.ws.onerror = (error) => {
-                console.error("!!! WebSocket Error ", error);
                 reject(error);
             };
 
