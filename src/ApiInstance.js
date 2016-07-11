@@ -56,8 +56,7 @@ class ApiInstance {
         if (this.options.apis.indexOf("database_api") === -1) {
             this.options.apis.unshift("database_api");
         }
-        console.log("instance options:", this.options);
-    }
+	}
 
 	connect() {
 		if (this.wsRpc) {
