@@ -66,7 +66,7 @@ class ApiInstance {
         try {
             this.wsRpc = new WsRpc(this.options.url);
         } catch(err) {
-            console.err("wsRpc open error:", err);
+            console.error("wsRpc open error:", err);
         }
 
         this.initPromise = this.wsRpc.login(this.options.user, this.options.pass)
