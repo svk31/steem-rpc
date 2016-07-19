@@ -24,8 +24,8 @@ const options = {
 	// url: "ws://localhost:9090",
 	// debug: false
 };
-const {Client} = require("steem-rpc");
-var Api = Client(options);
+var {Client} = require("steem-rpc");
+var Api = Client.get(options, true);
 
 Api.initPromise.then(response => {
 	console.log("Api ready:", response);
