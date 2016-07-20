@@ -16,7 +16,7 @@
 
     <script src="../build/steem-rpc.min.js"></script>
     <script type="text/javascript">
-        var Api = window.steemWS(null, true);
+        var Api = window.steemWS.Client.get(null, true);
         Api.initPromise.then(response => {
             console.log("Api ready:", response);
             var sucessDiv = document.getElementById("success");
@@ -25,7 +25,7 @@
             Api.database_api().exec("get_dynamic_global_properties", []).then(response => {
                 console.log("get_dynamic_global_properties", response);
                 var globalTable = document.getElementById("dynamic_global");
-
+                sucessDiv.innerText = "Successfully connected to the Steemit API.";
                 for (var key in response) {
                     var tr = document.createElement("tr");
                     var keyTd = document.createElement("td");

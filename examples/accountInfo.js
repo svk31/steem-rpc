@@ -4,10 +4,10 @@
 const options = {
     // user: "username",
     // pass: "password",
-    url: "ws://localhost:8090"
+    // url: "ws://localhost:8090"
 };
-const {Client} = require("../src/index");
-var Api = Client(options, true);
+const {Client} = require("../src/index.js");
+var Api = Client.get(options, true);
 
 Api.initPromise.then(response => {
     console.log("response:", response);

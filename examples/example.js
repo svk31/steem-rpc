@@ -4,8 +4,8 @@ const options = {
 	// url: "ws://localhost:9090"
 };
 
-const {Client} = require("../src/index");
-var Api = Client(options, true);
+const {Client} = require("../src/index.js");
+var Api = Client.get(options, true);
 Api.initPromise.then(response => {
 	console.log("Api ready:", response);
 
