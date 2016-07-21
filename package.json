@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "mocha --recursive --watch",
-    "example": "node ./example/example.js",
+    "example": "node ./examples/example.js",
     "build": "babel src --presets babel-preset-es2015 --out-dir lib",
     "build:watch": "babel --watch src --presets babel-preset-es2015 --out-dir lib",
     "prebrowserify": "npm run build",
