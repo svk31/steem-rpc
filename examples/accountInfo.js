@@ -1,11 +1,9 @@
-
-
-
 const options = {
     // user: "username",
     // pass: "password",
     // url: "ws://localhost:8090"
 };
+
 const {Client} = require("../src/index.js");
 var Api = Client.get(options, true);
 
