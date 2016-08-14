@@ -2,7 +2,7 @@ const WsRpc = require("./WebSocketRpc");
 const SteemApi = require("./SteemApi");
 
 const defaultOptions = {
-    url: "wss://this.piston.rocks",
+    url: "wss://node.steem.ws",
     user: "",
     pass: "",
     debug: false,
@@ -12,11 +12,6 @@ const defaultOptions = {
 var apiInstance;
 
 module.exports = {
-
-    setRpcConnectionStatusCallback: function(callback) {
-        this.statusCb = callback;
-        if(apiInstance) apiInstance.setRpcConnectionStatusCallback(callback);
-    },
 
     reset: function ( options ) {
         if ( apiInstance ) {
@@ -28,8 +23,7 @@ module.exports = {
         return apiInstance;
     },
 
-	get(options, connect) {
-
+	get(options, connect, origin) {
 		if (!apiInstance) {
 			apiInstance = new ApiInstance(options);
 		}
@@ -64,7 +58,7 @@ class ApiInstance {
 		}
 
         try {
-            this.wsRpc = new WsRpc(this.options.url);
+            this.wsRpc = new WsRpc(this.options);
         } catch(err) {
             console.error("wsRpc open error:", err);
         }

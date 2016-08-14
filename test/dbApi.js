@@ -3,9 +3,8 @@ var expect = require("expect.js");
 const options = {
     // user: "username",
     // pass: "password",
-    url: "ws://127.0.0.1:8090",
     apis: ["database_api", "market_history_api"],
-    debug: true
+    debug: false
 };
 
 var {Client} = require("../src/index");
@@ -13,7 +12,7 @@ var Api = Client.get(options, true);
 
 describe("Db API", function ()  {
     this.timeout(10000);
-    // Connect once for all tests // ws://localhost:8090
+    // Connect once for all tests //
     before(function() {
         return Api.initPromise;
     });

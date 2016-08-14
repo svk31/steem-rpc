@@ -1,21 +1,33 @@
-class Api {
+const RWebSocket = require("./reconnecting-websocket");
 
-	constructor(wsUrl) {
+class WebSocketRpc {
 
-        var WebSocketClient = typeof(WebSocket) !== "undefined" ? require("ReconnectingWebSocket") : require("websocket").w3cwebsocket;
+	constructor(options, rcCallback = null) {
 
-		try {
-			this.ws = new WebSocketClient(wsUrl);
-		} catch(err) {
-			console.error("ws error:", err);
-		}
+		if (process.env.BROWSER) {
+            options.WebSocket = WebSocket;
+            options.idleTreshold = 60000;
+        } else {
+            options.WebSocket = require("websocket").w3cwebsocket;
+            options.server = true;
+            options.reconnectInterval = 1000;
+            options.reconnectDecay = 1.2;
+        }
+		this.ws = new RWebSocket(options.url, [], options);
 
         this.ws.timeoutInterval = 15000;
 
+		let initialConnect = true;
+		this.rcCallback = rcCallback;
 		this.connectPromise = new Promise((resolve, reject) => {
 
 			this.ws.onopen = () => {
-				resolve();
+				if (initialConnect) {
+                    initialConnect = false;
+                    resolve();
+                } else {
+                    if(this.rcCallback) this.rcCallback();
+                }
 			}
 
 			this.ws.onerror = (err) => {
@@ -23,12 +35,25 @@ class Api {
 			}
 
 			this.ws.onmessage = (message) => {
-				this.listener(JSON.parse(message.data));
+				let data = {};
+				try {
+					data = JSON.parse(message.data);
+				} catch(e) {
+					console.log("Unable to parse API response:", e);
+					data.error = "Unable to parse response " + JSON.stringify(message);
+				}
+				this.listener(data);
 			}
 		});
 
 		this.cbId = 0;
 		this.cbs = new Map();
+
+		if (process.env.BROWSER) {
+            window.onbeforeunload = () => {
+                this.close();
+            };
+        }
 	}
 
 	listener(message) {
@@ -40,7 +65,6 @@ class Api {
 				callback.resolve(message.result);
 			}
 		}
-
 	}
 
 	call(params) {
@@ -78,8 +102,11 @@ class Api {
     }
 
     close() {
-        this.ws.close();
+		if (this.ws) {
+	        this.ws.close();
+			this.ws = null;
+		}
     }
 }
 
-module.exports = Api;
+module.exports = WebSocketRpc;
