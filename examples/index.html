@@ -16,7 +16,7 @@
 
     <script src="../build/steem-rpc.js"></script>
     <script type="text/javascript">
-        var Api = window.steemWS.Client.get(null, true);
+        var Api = window.steemWS.Client.get({idleTreshold: 60000}, true);
         Api.initPromise.then(response => {
             console.log("Api ready:", response);
             var sucessDiv = document.getElementById("success");

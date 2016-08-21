@@ -13,7 +13,7 @@ var apiInstance;
 
 module.exports = {
 
-    reset: function ( options ) {
+    reset: function ( options = {} ) {
         if ( apiInstance ) {
             this.close();
         }
@@ -23,7 +23,7 @@ module.exports = {
         return apiInstance;
     },
 
-	get(options, connect, origin) {
+	get(options = {}, connect) {
 		if (!apiInstance) {
 			apiInstance = new ApiInstance(options);
 		}
