@@ -8,7 +8,7 @@ class WebSocketRpc {
             options.WebSocket = WebSocket;
 			options.idleTreshold = "idleTreshold" in options ? options.idleTreshold : 60000; // Only use idle threshold in browsers
         } else {
-            options.WebSocket = require("websocket").w3cwebsocket;
+            options.WebSocket = require("ws");
 			options.idleTreshold = 0; // Always reconnect in node.js
         }
 		options.reconnectInterval = 1000;

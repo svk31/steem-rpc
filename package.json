@@ -1,6 +1,6 @@
 {
   "name": "steem-rpc",
-  "version": "0.5.7",
+  "version": "0.6.0",
   "description": "Websocket RPC library for the Steem blockchain",
   "main": "lib/index.js",
   "browser": {
@@ -20,7 +20,7 @@
   "author": "Sigve Kvalsvik <bitsharesblocks@gmail.com> (https://github.com/svk31)",
   "license": "MIT",
   "dependencies": {
-    "websocket": "^1.0.23"
+    "ws": "^1.1.1"
   },
   "devDependencies": {
     "assert": "^1.3.0",
