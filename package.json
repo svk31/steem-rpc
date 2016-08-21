@@ -1,6 +1,6 @@
 {
   "name": "steem-rpc",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "Websocket RPC library for the Steem blockchain",
   "main": "lib/index.js",
   "browser": {
