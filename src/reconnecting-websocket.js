@@ -108,7 +108,7 @@
 
     var WebSocket;
 
-    function ReconnectingWebSocket(url, protocols, options) {
+    function ReconnectingWebSocket(options) {
 
         // Default settings
         var settings = {
@@ -159,7 +159,7 @@
         // These should be treated as read-only properties
 
         /** The URL as resolved by the constructor. This is always an absolute URL. Read only. */
-        this.url = url;
+        this.url = options.url;
 
         /** The number of attempted reconnects since starting, or the last successful connection. Read only. */
         this.reconnectAttempts = 0;
@@ -272,12 +272,12 @@
             }
 
             let surl = self.url;
-            if (Array.isArray(url)) {
+            if (Array.isArray(self.url)) {
                 surl = self.url[this.reconnectAttempts % self.url.length];
             }
 
             console.log('connecting to', surl);
-            ws = process.env.BROWSER ? new WebSocket(surl) : new WebSocket(surl, protocols || [], null, null, null, {maxReceivedFrameSize: 0x300000});
+            ws = new WebSocket(surl);
             ws.binaryType = this.binaryType;
 
             if (self.debug || ReconnectingWebSocket.debugAll) {

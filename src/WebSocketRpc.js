@@ -13,7 +13,7 @@ class WebSocketRpc {
 		options.reconnectInterval = 1000;
 		options.reconnectDecay = 1.2;
 
-		this.ws = new RWebSocket(options.url, [], options);
+		this.ws = new RWebSocket(options);
 
         this.ws.timeoutInterval = 15000;
 
@@ -49,7 +49,7 @@ class WebSocketRpc {
 		this.cbId = 0;
 		this.cbs = new Map();
 
-		if (process.env.BROWSER) {
+		if (typeof window !== "undefined") {
             window.onbeforeunload = () => {
                 this.close();
             };
