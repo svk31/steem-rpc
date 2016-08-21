@@ -4,7 +4,7 @@
   "description": "Websocket RPC library for the Steem blockchain",
   "main": "lib/index.js",
   "browser": {
-    "websocket": false
+    "ws": false
   },
   "scripts": {
     "test": "mocha --recursive",
