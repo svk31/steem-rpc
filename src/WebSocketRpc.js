@@ -60,6 +60,7 @@ class WebSocketRpc {
 	listener(message) {
 		let callback = this.cbs.get(message.id);
 		if (callback) {
+			this.cbs.delete(message.id);
 			if ("error" in message) {
 				callback.reject(message.error);
 			} else {
