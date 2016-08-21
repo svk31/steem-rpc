@@ -4,15 +4,15 @@ class WebSocketRpc {
 
 	constructor(options, rcCallback = null) {
 
-		if (process.env.BROWSER) {
+		if (typeof WebSocket !== "undefined") {
             options.WebSocket = WebSocket;
-            options.idleTreshold = 60000;
         } else {
             options.WebSocket = require("websocket").w3cwebsocket;
-            options.server = true;
-            options.reconnectInterval = 1000;
-            options.reconnectDecay = 1.2;
         }
+		options.idleTreshold = 60000;
+		options.reconnectInterval = 1000;
+		options.reconnectDecay = 1.2;
+
 		this.ws = new RWebSocket(options.url, [], options);
 
         this.ws.timeoutInterval = 15000;
