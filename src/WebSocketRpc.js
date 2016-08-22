@@ -49,6 +49,7 @@ class WebSocketRpc {
 
 		this.cbId = 0;
 		this.cbs = new Map();
+		this.methodCbs = new Map();
 
 		if (typeof window !== "undefined") {
             window.onbeforeunload = () => {
@@ -59,6 +60,13 @@ class WebSocketRpc {
 
 	listener(message) {
 		let callback = this.cbs.get(message.id);
+		let methodCallback = this.methodCbs.get(message.id);
+
+		if (methodCallback) {
+			this.methodCbs.delete(message.id);
+			methodCallback();
+		}
+
 		if (callback) {
 			this.cbs.delete(message.id);
 			if ("error" in message) {
@@ -84,6 +92,10 @@ class WebSocketRpc {
                 resolve: resolve,
                 reject: reject
             });
+
+			if (request.params[1] === "broadcast_transaction_with_callback" && request.params[2][0]) {
+				this.methodCbs.set(request.id, request.params[2][0]);
+			}
 
             this.ws.onerror = (error) => {
                 reject(error);
