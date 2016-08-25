@@ -99,6 +99,7 @@ class WebSocketRpc {
 
 			if (request.params[1] === "broadcast_transaction_with_callback" && request.params[2][0]) {
 				this.methodCbs.set(request.id, request.params[2][0]);
+				request.params[2][0] = request.params[2][0].resolve;
 			}
 
             this.ws.onerror = (error) => {
