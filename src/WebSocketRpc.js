@@ -64,7 +64,11 @@ class WebSocketRpc {
 
 		if (methodCallback) {
 			this.methodCbs.delete(message.id);
-			methodCallback();
+			if ("error" in message && "reject" in methodCallback) {
+				methodCallback.reject(message.error);
+			} else if ("resolve" in methodCallback) {
+				methodCallback.resolve();
+			}
 		}
 
 		if (callback) {
