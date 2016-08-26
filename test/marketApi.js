@@ -17,6 +17,14 @@ describe("Market API", function ()  {
         return Api.initPromise;
     });
 
+    beforeEach(function() {
+        return Api.connect();
+    });
+
+    afterEach(function() {
+        return Api.close();
+    });
+
     it("get_order_book", function(done) {
         return Api.market_history_api().exec("get_order_book", [5])
             .then(function(response) {

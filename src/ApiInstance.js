@@ -43,6 +43,7 @@ class ApiInstance {
 
 	constructor(options) {
         this.setOptions(options);
+        this.statusCallback = options.statusCallback;
 	}
 
     setOptions(options) {
@@ -60,16 +61,17 @@ class ApiInstance {
         try {
             this.wsRpc = new WsRpc(
                 this.options,
-                this.onReconnect.bind(this)
+                this.onReconnect.bind(this),
+                this.onStatusChange.bind(this)
             );
-            this.login();
+            return this.login();
         } catch(err) {
             console.error("wsRpc open error:", err);
         }
 	}
 
     login() {
-        this.initPromise = this.wsRpc.login(this.options.user, this.options.pass)
+        return this.initPromise = this.wsRpc.login(this.options.user, this.options.pass)
         .then(() => {
             var apiPromises = [];
 
@@ -98,11 +100,16 @@ class ApiInstance {
         this.login();
     }
 
+    onStatusChange(e) {
+        if (this.statusCallback) {
+            this.statusCallback(e);
+        }
+    }
+
     close() {
         if (this.wsRpc) {
             this.wsRpc.close();
             this.wsRpc = null
         }
-        this.options = null;
     }
 }

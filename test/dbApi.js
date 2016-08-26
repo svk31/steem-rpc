@@ -1,10 +1,11 @@
 var expect = require("expect.js");
-
+var status;
 const options = {
     // user: "username",
     // pass: "password",
     apis: ["database_api", "market_history_api", "network_broadcast_api"],
-    debug: false
+    debug: false,
+    statusCallback: function(e) {status = e;}
 };
 
 var {Client} = require("../src/index");
@@ -13,8 +14,17 @@ var Api = Client.get(options, true);
 describe("Db API", function ()  {
     this.timeout(10000);
     // Connect once for all tests //
+
     before(function() {
         return Api.initPromise;
+    });
+
+    beforeEach(function() {
+        return Api.connect();
+    });
+
+    afterEach(function() {
+        Api.close();
     });
 
     it("Get dynamic global object", function(done) {
@@ -58,6 +68,12 @@ describe("Db API", function ()  {
             }).catch(done);
     })
 
+    it("Status callback", function() {
+        expect(status).to.equal("open");
+        Api.close();
+        expect(status).to.equal("closed");
+    });
+
     // it("Test timeout and reconnect", function(done) {
     //     console.log("api", Api.network_broadcast_api().apiId);
     //     this.timeout(70000);
@@ -66,7 +82,7 @@ describe("Db API", function ()  {
     //         done();
     //     }, 65000)
     // })
-
+    //
     // it("Get potential signatures", function(done) {
     //
     //     return Api.database_api().exec("get_potential_signatures", [])

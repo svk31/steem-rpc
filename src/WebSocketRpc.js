@@ -2,7 +2,9 @@ const RWebSocket = require("./reconnecting-websocket");
 
 class WebSocketRpc {
 
-	constructor(options, rcCallback = null) {
+	constructor(options, rcCallback = null, statusCallback = null) {
+		this.rcCallback = rcCallback;
+		this.statusCallback = statusCallback;
 
 		if (typeof WebSocket !== "undefined") {
             options.WebSocket = WebSocket;
@@ -15,14 +17,14 @@ class WebSocketRpc {
 		options.reconnectDecay = 1.2;
 
 		this.ws = new RWebSocket(options);
-
         this.ws.timeoutInterval = 15000;
 
 		let initialConnect = true;
-		this.rcCallback = rcCallback;
+
 		this.connectPromise = new Promise((resolve, reject) => {
 
 			this.ws.onopen = () => {
+				if (this.statusCallback) this.statusCallback("open");
 				if (initialConnect) {
                     initialConnect = false;
                     resolve();
@@ -32,6 +34,7 @@ class WebSocketRpc {
 			}
 
 			this.ws.onerror = (err) => {
+				if (this.statusCallback) this.statusCallback("error");
 				reject(err);
 			}
 
@@ -45,6 +48,23 @@ class WebSocketRpc {
 				}
 				this.listener(data);
 			}
+
+			this.ws.onclose = () => {
+                // web socket may re-connect
+                this.cbs.forEach(value => {
+					value.reject('connection closed');
+				})
+
+				this.methodCbs.forEach(value => {
+					value.reject('connection closed');
+				})
+
+                this.cbs.clear();
+				this.methodCbs.clear();
+				this.cbId = 0;
+
+                if (this.statusCallback) this.statusCallback("closed");
+            };
 		});
 
 		this.cbId = 0;
@@ -122,6 +142,7 @@ class WebSocketRpc {
 
     close() {
 		if (this.ws) {
+			this.ws.onclose();
 	        this.ws.close();
 			this.ws = null;
 		}
