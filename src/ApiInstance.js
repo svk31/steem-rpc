@@ -58,11 +58,17 @@ class ApiInstance {
 		}
 
         try {
-            this.wsRpc = new WsRpc(this.options);
+            this.wsRpc = new WsRpc(
+                this.options,
+                this.onReconnect.bind(this)
+            );
+            this.login();
         } catch(err) {
             console.error("wsRpc open error:", err);
         }
+	}
 
+    login() {
         this.initPromise = this.wsRpc.login(this.options.user, this.options.pass)
         .then(() => {
             var apiPromises = [];
@@ -86,7 +92,11 @@ class ApiInstance {
             // console.error("Unable to connect to", this.options.url);
             throw new Error("Unable to connect to " + this.options.url);
         });
-	}
+    }
+
+    onReconnect() {
+        this.login();
+    }
 
     close() {
         if (this.wsRpc) {

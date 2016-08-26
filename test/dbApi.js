@@ -3,7 +3,7 @@ var expect = require("expect.js");
 const options = {
     // user: "username",
     // pass: "password",
-    apis: ["database_api", "market_history_api"],
+    apis: ["database_api", "market_history_api", "network_broadcast_api"],
     debug: false
 };
 
@@ -57,6 +57,15 @@ describe("Db API", function ()  {
                 done();
             }).catch(done);
     })
+
+    // it("Test timeout and reconnect", function(done) {
+    //     console.log("api", Api.network_broadcast_api().apiId);
+    //     this.timeout(70000);
+    //     setTimeout(function() {
+    //         console.log("api", Api.network_broadcast_api().apiId);
+    //         done();
+    //     }, 65000)
+    // })
 
     // it("Get potential signatures", function(done) {
     //

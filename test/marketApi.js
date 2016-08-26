@@ -3,7 +3,7 @@ var expect = require("expect.js");
 const options = {
     // user: "username",
     // pass: "password",
-    apis: ["database_api", "market_history_api"],
+    apis: ["database_api", "market_history_api", "network_broadcast_api"],
     debug: false
 };
 

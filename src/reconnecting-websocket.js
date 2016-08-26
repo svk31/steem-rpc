@@ -310,7 +310,7 @@
 
             ws.onclose = function(event) {
                 if(event.code !== 1000)
-                    console.log('WARNING! ws connection', surl, 'closed: ', event && event.reason ? event.reason : event);
+                    console.log('WARNING! ws connection', surl, 'closed');
                 clearTimeout(timeout);
                 ws = null;
                 if (forcedClose) {
