@@ -15,7 +15,9 @@ class SteemApi {
 	exec(method, params) {
 		return this.wsRpc.call([this.apiId, method, params]).catch(error => {
 			console.error("SteemApi error:", method, params, JSON.stringify(error));
-			throw new Error("SteemApi error:" + method + params + JSON.stringify(error))
+			var newErr = new Error("SteemApi error:" + method + params + JSON.stringify(error));
+			newErr.original = error;
+			throw newErr;
 		})
 	}
 }
