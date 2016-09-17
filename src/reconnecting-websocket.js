@@ -254,7 +254,9 @@
         this.reconnect = function () {
             var timeout = self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts);
             timeout = timeout > self.maxReconnectInterval ? self.maxReconnectInterval : timeout;
-            console.log('WebSocket: will try to reconnect in ' + parseInt(timeout/1000) + ' sec, attempt #' + (self.reconnectAttempts + 1));
+            if (self.debug) {
+                console.debug('WebSocket: will try to reconnect in ' + parseInt(timeout/1000) + ' sec, attempt #' + (self.reconnectAttempts + 1));
+            }
             setTimeout(function () {
                 self.reconnectAttempts++;
                 self.open(true);
@@ -276,7 +278,9 @@
                 surl = self.url[this.reconnectAttempts % self.url.length];
             }
 
-            console.log('connecting to', surl);
+            if (self.debug) {
+                console.debug('connecting to', surl);
+            }
             ws = new WebSocket(surl);
             ws.binaryType = this.binaryType;
 
@@ -309,7 +313,7 @@
             };
 
             ws.onclose = function(event) {
-                if(event.code !== 1000)
+                if(event.code !== 1000 && self.debug)
                     console.log('WARNING! ws connection', surl, 'closed');
                 clearTimeout(timeout);
                 ws = null;
@@ -333,14 +337,16 @@
                     if (!self.idleTreshold || ((new Date() - self.idleSince) < self.idleTreshold)) {
                         self.reconnect();
                     } else {
-                        console.debug('idle - will reconnect later');
+                        if (self.debug) {
+                            console.debug('idle - will reconnect later');
+                        }
                         self.pendingReconnect = true;
                     }
                 }
             };
             ws.onmessage = function(event) {
                 if (self.debug || ReconnectingWebSocket.debugAll) {
-                    console.debug('ReconnectingWebSocket', 'onmessage', self.url, event.data);
+                    console.debug('ReconnectingWebSocket', 'onmessage', self.url);
                 }
                 var e = generateEvent('message');
                 e.data = event.data;
